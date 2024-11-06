@@ -1,7 +1,5 @@
 package com.xaye.loglibrary;
 
-import android.os.Environment;
-
 import com.xaye.loglibrary.file.SimpleWriter;
 
 import java.io.File;
@@ -14,24 +12,21 @@ import java.util.Date;
  *
  * @date: 2024/11/4
  */
-public final class XLoggerManager {
-    private static final String LOG_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + "/charge_logs/";
-    private static XLoggerManager instance;
+final class LogToFile {
+    private static LogToFile instance;
     private SimpleWriter currentWriter;
     private String currentLogDate;
-    private static int daysToKeep = 7; // Default log retention days
-    private static String logTag = "V5 Charge"; // Default tag
-
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private LogConfiguration config;
 
-
-    private XLoggerManager() {
+    private LogToFile(LogConfiguration config) {
+        this.config = config;
         openNewLogForToday();
     }
 
-    public static synchronized XLoggerManager getInstance() {
+    public static synchronized LogToFile getInstance(LogConfiguration config) {
         if (instance == null) {
-            instance = new XLoggerManager();
+            instance = new LogToFile(config);
         }
         return instance;
     }
@@ -43,8 +38,8 @@ public final class XLoggerManager {
                 currentWriter.close();
             }
             currentLogDate = today;
-            new File(LOG_DIRECTORY).mkdirs();
-            File logFile = new File(LOG_DIRECTORY, currentLogDate + ".log");
+            new File(config.getLogDirectory()).mkdirs();
+            File logFile = new File(config.getLogDirectory(), currentLogDate + ".log");
             currentWriter = new SimpleWriter();
             currentWriter.open(logFile);
             cleanupOldLogs();
@@ -52,9 +47,9 @@ public final class XLoggerManager {
     }
 
     private void cleanupOldLogs() {
-        File[] files = new File(LOG_DIRECTORY).listFiles();
+        File[] files = new File(config.getLogDirectory()).listFiles();
         if (files != null) {
-            String limitDate = new SimpleDateFormat("yyyy-MM-dd").format(getDateDaysAgo(daysToKeep));
+            String limitDate = new SimpleDateFormat("yyyy-MM-dd").format(getDateDaysAgo(config.getRetentionDays()));
             for (File file : files) {
                 if (file.getName().replace(".log", "").compareTo(limitDate) < 0) {
                     file.delete();
@@ -73,7 +68,7 @@ public final class XLoggerManager {
         openNewLogForToday();
         if (currentWriter != null && currentWriter.isOpened()) {
             String timeStamp = new SimpleDateFormat("MM-dd HH:mm:ss.SSS").format(new Date());
-            currentWriter.appendLog(timeStamp + " [" + logTag + "] " + log);
+            currentWriter.appendLog(timeStamp + log);
         }
     }
 
@@ -81,14 +76,6 @@ public final class XLoggerManager {
         if (currentWriter != null) {
             currentWriter.close();
         }
-    }
-
-    public static void setDaysToKeep(int days) {
-        daysToKeep = days;
-    }
-
-    public static void setLogTag(String tag) {
-        logTag = tag;
     }
 }
 

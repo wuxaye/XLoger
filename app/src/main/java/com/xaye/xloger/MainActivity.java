@@ -5,8 +5,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.xaye.loglibrary.XLogger;
-import com.xaye.loglibrary.XLoggerManager;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -15,5 +13,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         XLogger.d("hello world");
+        XLogger.i("hello world");
+        XLogger.w("hello world");
+        XLogger.e("hello world");
+
     }
 }

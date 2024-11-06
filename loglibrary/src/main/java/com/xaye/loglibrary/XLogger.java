@@ -12,63 +12,62 @@ import com.xaye.loglibrary.utils.Util;
  * @date: 2024/6/28
  */
 public class XLogger {
-    private static final String DEFAULT_TAG = "XLogger";
+    private static LogConfiguration config;
 
-    //打印调试开关
-    private static final boolean IS_DEBUG = true;
+    static boolean sIsInitialized;
 
-    //Log 单词打印的最大长度
-    private static final int MAX_LENGTH = 3 * 1024;
-    public static void v(String message) {
-        if (IS_DEBUG) {
-            String[] strings = Util.splitStr(MAX_LENGTH,message);
+    // Private constructor to prevent instantiation
+    private XLogger() {
+    }
+
+    // Default initialization with default settings
+    public static void init() {
+        init(new LogConfiguration.Builder().build());
+    }
+
+    // Initialization with custom configuration
+    public static void init(LogConfiguration configuration) {
+        config = configuration;
+        sIsInitialized = true;
+    }
+
+    public static void log(int level, String message) {
+        assertInitialization();
+        if (config.isDebugEnabled() && config.getLogLevel() <= level) {
+            String[] strings = Util.splitStr(config.getMaxLogLength(), message);
             for (String str : strings) {
-                prepareLog(Log.VERBOSE, getTAG(), str, null, true);
+                prepareLog(level, getTAG(), str, null, true);
             }
         }
+    }
+
+    public static void v(String message) {
+        log(LogLevel.VERBOSE, message);
     }
 
     public static void d(String message) {
-        if (IS_DEBUG) {
-            String[] strings = Util.splitStr(MAX_LENGTH,message);
-            for (String str : strings) {
-                prepareLog(Log.DEBUG, getTAG(), str, null, true);
-            }
-        }
+        log(LogLevel.DEBUG, message);
     }
 
     public static void i(String message) {
-        if (IS_DEBUG) {
-            String[] strings = Util.splitStr(MAX_LENGTH,message);
-            for (String str : strings) {
-                prepareLog(Log.INFO, getTAG(), str, null, true);
-            }
-        }
+        log(LogLevel.INFO, message);
     }
 
     public static void w(String message) {
-        if (IS_DEBUG) {
-            String[] strings = Util.splitStr(MAX_LENGTH,message);
-            for (String str : strings) {
-                prepareLog(Log.WARN, getTAG(), str, null, true);
-            }
-        }
+        log(LogLevel.WARN, message);
     }
 
     public static void e(String message) {
-        if (IS_DEBUG) {
-            String[] strings = Util.splitStr(MAX_LENGTH,message);
-            for (String str : strings) {
-                prepareLog(Log.ERROR, getTAG(), str, null, true);
-            }
-        }
+        log(LogLevel.ERROR, message);
     }
 
+
     private static void prepareLog(int priority, String tag, String message, Throwable throwable, boolean saveLog) {
-        String logTag = (tag != null) ? tag : DEFAULT_TAG;
+        String logTag = (tag != null) ? tag : config.getTag();
+        if (config.getLogLevel() > priority) return;
 
         if (throwable != null) {
-            // logger.logThrowable(logTag, throwable, message);
+            Log.e(logTag, message, throwable); // 记录异常和信息
         } else {
             switch (priority) {
                 case Log.VERBOSE:
@@ -92,29 +91,34 @@ public class XLogger {
             }
         }
         if (saveLog) {
-            XLoggerManager.getInstance().appendLog(" "+ LogLevel.getShortLevelName(priority)+" " + tag + ": " + message);
+            LogToFile.getInstance(config).appendLog(" " + LogLevel.getShortLevelName(priority) + " " + tag + ": " + message);
         }
     }
 
+    static void assertInitialization() {
+        if (!sIsInitialized) {
+            init(); // 默认初始化或抛出异常提醒初始化
+        }
+    }
 
-    private static synchronized String getTAG() {
+    private static String getTAG() {
+        if (config.isStackTraceEnabled()) {
+            return computeTag();
+        } else return config.getTag();
+    }
+
+    private static String computeTag() {
         StringBuilder tag = new StringBuilder();
         StackTraceElement[] sts = Thread.currentThread().getStackTrace();
-        if (sts == null) {
-            return "";
-        }
+        if (sts == null) return config.getTag();
         for (StackTraceElement st : sts) {
-            // 筛选获取需要打印的TAG
             if (!st.isNativeMethod() &&
                     !Thread.class.getName().equals(st.getClassName()) &&
                     !XLogger.class.getName().equals(st.getClassName())) {
-                // 获取文件名以及打印的行数
                 tag.append("(").append(st.getFileName()).append(":").append(st.getLineNumber()).append(")");
                 return tag.toString();
             }
         }
-        return "";
+        return config.getTag();
     }
-
-
 }
