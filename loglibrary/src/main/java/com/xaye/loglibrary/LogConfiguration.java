@@ -20,6 +20,9 @@ public class LogConfiguration {
     private final boolean stackTraceEnabled;
     private final int maxLogLength;
 
+    //isSaveLogEnabled
+    private final boolean isSaveLogEnabled;
+
     private LogConfiguration(Builder builder) {
         this.tag = builder.tag;
         this.logDirectory = builder.logDirectory;
@@ -28,6 +31,7 @@ public class LogConfiguration {
         this.logLevel = builder.logLevel;
         this.stackTraceEnabled = builder.stackTraceEnabled;
         this.maxLogLength = builder.maxLogLength;
+        this.isSaveLogEnabled = builder.isSaveLogEnabled;
     }
 
     public String getTag() {
@@ -58,6 +62,10 @@ public class LogConfiguration {
         return maxLogLength;
     }
 
+    public boolean isSaveLogEnabled() {
+        return isSaveLogEnabled;
+    }
+
     public static class Builder {
         private String tag = "XLogger";
         private String logDirectory = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + tag + File.separator;
@@ -66,6 +74,8 @@ public class LogConfiguration {
         private int logLevel = LogLevel.ALL;
         private boolean stackTraceEnabled = true;  // 堆栈跟踪日志的默认值,开启会消耗一些性能
         private int maxLogLength = 3 * 1024;  // 默认值：单词打印最大长度，超过会被分段打印
+
+        private boolean isSaveLogEnabled = false;
 
         public Builder setTag(String tag) {
             this.tag = tag;
@@ -99,6 +109,11 @@ public class LogConfiguration {
 
         public Builder setMaxLogLength(int maxLogLength) {  // 新增方法设置日志单词最大长度
             this.maxLogLength = maxLogLength;
+            return this;
+        }
+
+        public Builder setIsSaveLogEnabled(boolean isSaveLogEnabled) {
+            this.isSaveLogEnabled = isSaveLogEnabled;
             return this;
         }
 
