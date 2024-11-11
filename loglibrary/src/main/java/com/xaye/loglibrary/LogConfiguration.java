@@ -19,8 +19,6 @@ public class LogConfiguration {
     private final int logLevel;
     private final boolean stackTraceEnabled;
     private final int maxLogLength;
-
-    //isSaveLogEnabled
     private final boolean isSaveLogEnabled;
 
     private LogConfiguration(Builder builder) {
