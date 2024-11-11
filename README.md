@@ -2,9 +2,17 @@
 
 开发中...
 
+## 功能包括
+
+- 日志存文件、文件保留天数
+- 日志打印堆栈信息
+- 支持xml、json日志格式输出
+- 更多功能，开发中...
+
 ## 简单使用
 
 在Application中初始化，如果不初始化，则在第一次打印日志时使用默认值进行初始化
+
 ```
 
 XLogger.init(new LogConfiguration.Builder()
@@ -17,6 +25,7 @@ XLogger.init(new LogConfiguration.Builder()
 ```
 
 输出示例
+
 ```
 2024-11-06 14:49:55.231 18969-18969 xLog                    com.xaye.xloger                      D  hello world
 2024-11-06 14:49:55.239 18969-18969 xLog                    com.xaye.xloger                      I  hello world
