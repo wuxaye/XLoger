@@ -16,6 +16,8 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
+
     private static final String URL = "https://www.wanandroid.com//hotkey/json"; // 示例 URL，返回 JSON 格式数据
 
     @Override
@@ -23,10 +25,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //未指定TAG，默认展示 XLoger ,配置全局日志TAG后显示全局TAG，开启堆栈跟踪 显示日志打印文件名及具体行数
         XLogger.d("hello world");
         XLogger.i("hello world");
         XLogger.w("hello world");
         XLogger.e("hello world");
+
+        //指定TAG，优先级最高
+        XLogger.d(TAG, "hello world");
+        XLogger.i(TAG, "hello world");
+        XLogger.w(TAG, "hello world");
+        XLogger.e(TAG, "hello world");
+
+        XLogger.wtf("严重警告");
+
+        XLogger.e("严重警告",new Throwable("我 是 Throwable"));
 
         fetchJsonData();
     }

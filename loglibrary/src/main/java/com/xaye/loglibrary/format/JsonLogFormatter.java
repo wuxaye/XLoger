@@ -11,7 +11,7 @@ import org.json.JSONObject;
  *
  * @date: 2024/11/11
  */
-public class JsonLogFormatter implements LogFormatter {
+public class JsonLogFormatter implements LogFormatter<String> {
 
     // 美化输出时使用的缩进空格数
     private static final int JSON_INDENT = 4;

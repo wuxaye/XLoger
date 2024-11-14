@@ -17,7 +17,7 @@ import javax.xml.transform.stream.StreamSource;
  *
  * @date: 2024/11/11
  */
-public class XmlLogFormatter implements LogFormatter {
+public class XmlLogFormatter implements LogFormatter<String> {
 
     // 美化输出时使用的缩进空格数
     private static final int XML_INDENT = 4;
