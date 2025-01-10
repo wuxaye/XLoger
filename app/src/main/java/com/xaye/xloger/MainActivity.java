@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private static final String URL = "https://www.wanandroid.com//hotkey/json"; // 示例 URL，返回 JSON 格式数据
+    private static final String URL = "https://www.wanandroid.com/hotkey/json"; // 示例 URL，返回 JSON 格式数据
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

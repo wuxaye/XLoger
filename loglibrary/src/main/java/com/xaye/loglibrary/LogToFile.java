@@ -51,7 +51,7 @@ final class LogToFile {
         if (files != null) {
             String limitDate = new SimpleDateFormat("yyyy-MM-dd").format(getDateDaysAgo(config.getRetentionDays()));
             for (File file : files) {
-                if (file.getName().replace(".log", "").compareTo(limitDate) < 0) {
+                if (file.getName().replace(".log", "").compareTo(limitDate) <= 0) {
                     file.delete();
                 }
             }
