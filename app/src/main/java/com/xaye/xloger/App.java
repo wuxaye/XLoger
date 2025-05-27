@@ -24,7 +24,7 @@ public class App extends Application {
                 .setIsSaveLogEnabled(false) //是否开启日志文件保存功能，默认为false
                 .setRetentionDays(3) // 日志保留天数，默认为7天
                 .setMaxTotalLogSize(100 * 1024 * 1024) // x指定日志文件总大小，超过此值会自动删除最老的日志文件，默认不限制
-                .setLogSizeCheckInterval(10 * 60 * 1000) //  x节流检查间隔，默认 5分钟，检查日志文件总大小的时间间隔,不设置 maxTotalLogSize ，此值无效
+                .setLogSizeCheckInterval(10 * 60 * 1000) //  x检查间隔，默认 5分钟，检查日志文件总大小的时间间隔,不设置 maxTotalLogSize ，此值无效
                 .build());
     }
 }
