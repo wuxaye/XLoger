@@ -85,3 +85,14 @@ XLogger.e("严重警告",new Throwable("我 是 Throwable"));
                                                         	at android.os.Handler.dispatchMessage(Handler.java:106)
                                                         	at android.os.Looper.loop(Looper.java:223)
 ```
+
+## 版本更新
+
+> V2.1
+```
+新增功能：
+- 自动压缩历史日志文件（除了当天的日志文件）
+- 压缩成功后删除原始日志文件，只保留压缩文件
+- 使用新的命名格式：2025_07_23_log.zip
+- 压缩过程不影响当前日志写入
+```
