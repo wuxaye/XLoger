@@ -47,7 +47,8 @@ public class XLogger {
             logPrinter.printLog(level, logTag, formattedMessage, null);
 
             if (config.isSaveLogEnabled()) {
-                LogToFile.getInstance(config).appendLog(formattedMessage);
+                //LogToFile.getInstance(config).appendLog(formattedMessage);
+                LogFileManager.getInstance(config).appendLog(formattedMessage);
             }
         }
     }

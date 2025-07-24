@@ -20,6 +20,13 @@ import java.util.concurrent.TimeUnit;
  *
  * @date: 2024/11/4
  */
+
+/**
+ * 按日期创建和切换日志文件，每天生成一个新日志文件；
+ * 定时清理过期日志（按保留天数）；
+ * 控制日志总大小，超出限制时删除旧文件，支持处理当前正在写入的日志文件；
+ * 低优先级后台线程执行清理任务，避免影响主线程。
+ */
 final class LogToFile {
     private static LogToFile instance;
     private SimpleWriter currentWriter;
